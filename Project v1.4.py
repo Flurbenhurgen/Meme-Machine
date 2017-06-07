@@ -1,16 +1,9 @@
 '''
-Version 1.3
+Version 1.4
 
-Renamed choose_text to choose_random_text
-Removed second if statement of custom_meme
-Improved comments
-Separate custom_meme into custom_meme_text and custom_meme_image
-Rename meme_type_num to type_code
-Rename check_input to random_or_custom
-Create checkfor_invalid_input function that can be used for all functions
-Adapt check_input and custom_meme to be used with checkfor_invalid_input
-Separated welcome into welcome and get_type_code
-Added easter egg if image code 6 is chosen for a custom meme
+Renamed checkfor_invalid_input to check_user_input
+Renamed variable validity to inputIsNotValid
+Changed check_user_input so that it returns a boolean
 '''
 
 import PIL, random, os
@@ -41,27 +34,34 @@ def get_type_code():
     random_or_custom(type_code)
 
 #Universal input validity checking that can be used for all functions
-def checkfor_invalid_input(user_input, return_function):
-    validity = user_input.isalpha() or not user_input.isdigit() or int(user_input) < 1 or int(user_input) > 6
-    if validity:
-        print("invalid input... do you want a meme or not?")
-        return_function()
+def check_user_input(user_input):
+    inputIsNotValid = user_input.isalpha() or not user_input.isdigit() or int(user_input) < 1 or int(user_input) > 6
+    if inputIsNotValid:
+        return False
+    else:
+        return True
 
 #Based on the type_code selected by the user, determines if a random text meme or a custom meme will be made
 def random_or_custom(type_code):
-    checkfor_invalid_input(type_code, get_type_code)
-    if int(type_code) == 6:
-        custom_meme_image()
+    if check_user_input(type_code):
+        if int(type_code) == 6:
+            custom_meme_image()
+        else:
+            choose_random_text(type_code)
     else:
-        choose_random_text(type_code)
+        print("Invalid Input - Try Again")
+        get_type_code()
 
 #Asks the user which image to be used for their custom meme
 def custom_meme_image():
     print()
     print("What image will you use for your meme? (refer to image codes above)")
     image_code = input()      #expects a value from 1-5
-    checkfor_invalid_input(image_code, custom_meme_image)
-    custom_meme_text(image_code)
+    if check_user_input(image_code):
+        custom_meme_text(image_code)
+    else:
+        print("Invalid Input - Try Again")
+        custom_meme_image()
 
 #Asks user to input the text to be displayed on their custom meme
 def custom_meme_text(image_code):
