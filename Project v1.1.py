@@ -1,3 +1,8 @@
+'''
+Version 1.1
+custom_meme_gen and meme_gen are combined into one function called generate_meme
+'''
+
 #Import the necessary libraries/modules needed to make certain functions work
 import PIL, random, os
 from PIL import ImageFont, Image, ImageDraw
@@ -23,15 +28,15 @@ def welcome():
 #Calls the proper function based on user input / expects a string
 def check_input(meme_type_num):
     if meme_type_num == '1':
-        meme_gen(okay)
+        generate_meme(False, okay, 0, 0)
     elif meme_type_num == '2':
-        meme_gen(troll)
+        generate_meme(False, troll, 0, 0)
     elif meme_type_num == '3':
-        meme_gen(forever)
+        generate_meme(False, forever, 0, 0)
     elif meme_type_num == '4':
-        meme_gen(realize)
+        generate_meme(False, realize, 0, 0)
     elif meme_type_num == '5':
-        meme_gen(simply)
+        generate_meme(False, simply, 0, 0)
     elif meme_type_num == '6':
         custom_meme()
     elif meme_type_num == "":   #If meme_type_num has no value...
@@ -49,41 +54,30 @@ def custom_meme():
     if chosen_image.isalpha() or int(chosen_image) < 1 or int(chosen_image) > 5 :   #Check for invalid input
         print("Invalid image code")
         custom_meme()
-    print("What will the text be?")
-    chosen_text = input().upper()
     if int(chosen_image) < 1 or int(chosen_image) > 5:  #Detect for invalid input
         print("invalid image code")
     else:
-        custom_meme_gen(meme_num[str(chosen_image)], chosen_text)   #Call custom_meme_gen function with parameters dictating image and text
+        print("What will the text be?")
+        chosen_text = input().upper()
+        generate_meme(True, 0, meme_num[str(chosen_image)], chosen_text)   #Call custom_meme_gen function with parameters dictating image and text
 
-#Expects integer and string - Outputs edited image
-def custom_meme_gen(chosen_image, chosen_text):
+#Expects integer, integer, string, and string - Outputs edited image
+def generate_meme(is_custom, meme_type, chosen_image, chosen_text):
     print("Generating your new DANK meme...")
     x, y = 0, 0
-    img = Image.open('images/' + str(chosen_image) + '.png')    #Access image file from relative directory
+    if is_custom is True:                                           #If the meme is custom
+        img = Image.open('images/' + str(chosen_image) + '.png')    #Access image file from relative directory
+        text = chosen_text
+    else:                                                           #If the meme used the predefined lists above
+        img = Image.open('images/' + meme_type[0] + '.png')         #Open image file from relative directory
+        text = random.choice(meme_type[1:]).upper()
     draw = ImageDraw.Draw(img)
-    draw.text((x+5,y),multi_line(chosen_text),(0,0,0),font=font,align="center")     #Black outline around white text
-    draw.text((x-5,y),multi_line(chosen_text),(0,0,0),font=font,align="center")     #||
-    draw.text((x,y+5),multi_line(chosen_text),(0,0,0),font=font,align="center")     #||
-    draw.text((x,y-5),multi_line(chosen_text),(0,0,0),font=font,align="center")     #||
-    draw.text((x,y),multi_line(chosen_text),(255,255,255),font=font,align="center")  #White text over black outline
+    draw.text((x+5,y),multi_line(text),(0,0,0),font=font,align="center")     #Black outline around white text
+    draw.text((x-5,y),multi_line(text),(0,0,0),font=font,align="center")     #||
+    draw.text((x,y+5),multi_line(text),(0,0,0),font=font,align="center")     #||
+    draw.text((x,y-5),multi_line(text),(0,0,0),font=font,align="center")     #||
+    draw.text((x,y),multi_line(text),(255,255,255),font=font,align="center")  #White text over black outline
     img.show()      #Open edited image
-    os.system('cls')    #clear console
-    welcome()   #Restart program by calling the beginning function
-
-#Expects integer and string - Outputs edited image
-def meme_gen(meme_type):
-    print("Generating your new DANK meme...")
-    x, y = 0, 0
-    img = Image.open('images/' + meme_type[0] + '.png')                         #Open image file from relative directory
-    draw = ImageDraw.Draw(img)
-    choice = random.choice(meme_type[1:]).upper()
-    draw.text((x+5,y),multi_line(choice),(0,0,0),font=font,align="center")      #Black outline behind white text
-    draw.text((x-5,y),multi_line(choice),(0,0,0),font=font,align="center")
-    draw.text((x,y+5),multi_line(choice),(0,0,0),font=font,align="center")
-    draw.text((x,y-5),multi_line(choice),(0,0,0),font=font,align="center")
-    draw.text((x,y),multi_line(choice),(255,255,255),font=font,align="center")  #White text over black outline
-    img.show()     #Open edited image
     os.system('cls')    #clear console
     welcome()   #Restart program by calling the beginning function
 
