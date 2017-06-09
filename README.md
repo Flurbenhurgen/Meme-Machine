@@ -12,3 +12,7 @@ HOW TO USE:
 * The program will output several options to the console, use the number code next to each option to choose one.
 * To input values into the program, type in the console and press ENTER
 * When an image is generated, the program will restart itself to be used again.
+
+ADD A NEW IMAGE:
+* Put a PNG image with a bit depth of 24 or lower in the images folder.
+* When starting the program, the new image will be detected.
