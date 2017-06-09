@@ -2,13 +2,13 @@
 A little project I made for my CS111 class
 
 TO RUN:
-	1. unzip files from zip archive
-	2. install Python 3, latest version is preferable
-	3. install the Pillow library using easy_install.exe or pip
-	4. ensure images folder, impact.ttf, and project.py are all located in the same folder
-	5. double click on project.py to run
+1. install Python 3, latest version is preferable
+2. install the Pillow library using easy_install.exe or pip
+3. unzip files from zip archive
+4. ensure images folder, impact.ttf, and Python file are all located in the same folder
+5. double click on the Python file to run
 
 HOW TO USE:
-	*The program will output several options to the console, use the number code next to each option to choose one.
-	*To input values into the program, type in the console and press ENTER
-	*When an image is generated, the program will restart itself to be used again.
+* The program will output several options to the console, use the number code next to each option to choose one.
+* To input values into the program, type in the console and press ENTER
+* When an image is generated, the program will restart itself to be used again.
