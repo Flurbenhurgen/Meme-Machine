@@ -26,32 +26,39 @@
 	Changed check_user_input so that it returns a boolean
 
 1.2.0
-    Improved invalid input messages
-    Renamed check_user_input to user_input_is_valid
-    Renamed get_type_code to ask_meme_code
-    Renamed variable type_code to meme_type
-    Renamed everything to do with image_code to image_type
-    Renamed phrase and new_phrase to text and new_text
-    Renamed multi_line to text_wrap
-    Added "top" functionality to user_input_is_valid so that there aren't hard set parameters for a valid input
-    Slightly improved list calling through the use of eval()
-    Added ability to use your own image to the Meme Machine!
-        Added stock_or_custom()
-        Added upload_image()
-        Added detectBadImages()
-        Added resizeImage()
-        Added select_uploaded_image()
-        Added image_type_is_valid()
+	Improved invalid input messages
+	Renamed check_user_input to user_input_is_valid
+	Renamed get_type_code to ask_meme_code
+	Renamed variable type_code to meme_type
+	Renamed everything to do with image_code to image_type
+	Renamed phrase and new_phrase to text and new_text
+	Renamed multi_line to text_wrap
+	Added "top" functionality to user_input_is_valid so that there aren't hard set parameters for a valid input
+	Slightly improved list calling through the use of eval()
+	Added ability to use your own image to the Meme Machine!
+        	Added stock_or_custom()
+	        Added upload_image()
+        	Added detectBadImages()
+	        Added resizeImage()
+	        Added select_uploaded_image()
+	        Added image_type_is_valid()
 
 1.3.0
-    Changed the user_input_is_valid parameter "top" to a tuple called valid_range consisting of a lower limit [0] and an upper limit [1]
-    Removed hackerman as an easter egg and added it as an official option
-    Changed instances of pascalCase to underscore seperation
-    Removed functions
-      stock_or_custom()
-      upload_image()
-      select_uploaded_image()
-      image_type_is_valid()
-    Added support for a dynamic filesystem in the images folder. Program will adapt to the amount of images in the folder.
-      Added function set_up_images
-      Added function variable_exists
+	Changed the user_input_is_valid parameter "top" to a tuple called valid_range consisting of a lower limit [0] and an upper limit [1]
+	Removed hackerman as an easter egg and added it as an official option
+	Changed instances of pascalCase to underscore seperation
+	Removed functions
+		stock_or_custom()
+		upload_image()
+		select_uploaded_image()
+		image_type_is_valid()
+	Added support for a dynamic filesystem in the images folder. Program will adapt to the amount of images in the folder.
+	Added function set_up_images
+	Added function variable_exists
+
+1.3.1
+	Implement a main function to show core logic and facilitate functions
+	Renamed user_input_is_valid to user_input_is_invalid
+	Added function reset_code()
+	Removed function random_or_custom
+	Fixed bug that would cause the list of meme options to have double entries 

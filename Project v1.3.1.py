@@ -1,17 +1,10 @@
 '''
 Version 1.3.0
 
-* Changed the user_input_is_valid parameter "top" to a tuple called valid_range consisting of a lower limit [0] and an upper limit [1]
-* Removed hackerman as an easter egg and added it as an official option
-* Changed instances of pascalCase to underscore seperation
-* Removed functions
-  * stock_or_custom()
-  * upload_image()
-  * select_uploaded_image()
-  * image_type_is_valid()
-* Added support for a dynamic filesystem in the images folder. Program will adapt to the amount of images in the folder.
-  * Added function set_up_images
-  * Added function variable_exists
+* Implement a main function to show core logic and facilitate functions
+* Renamed user_input_is_valid to user_input_is_invalid
+* Added function reset_code()
+* Removed function random_or_custom
 '''
 
 import PIL, random, os
@@ -60,59 +53,39 @@ def resize_image(bad_images):
 #Indroduces the user to the program - First function to be called
 def welcome():
     print("[Hello, welcome to the MEME-MESHEEN]\nWhat will your order be?")
-    ask_meme_type()
 
 #Meme type determines which image the program will use for random text or if a custom meme will be created
 def ask_meme_type():
     for item in meme_codes:
         print('(' + item + ')', meme_codes[item].capitalize())
     print('(' + str(number_of_images + 1) + ') Make your own')
-    random_or_custom(str(input()))
+    return str(input())
 
 #Universal input validity checking that can be used for all functions
-def user_input_is_valid(user_input, valid_range):
-    inputIsNotValid = user_input.isalpha() or not user_input.isdigit() or int(user_input) < valid_range[0] or int(user_input) > valid_range[1]
-    if inputIsNotValid:
-        return False
-    else:
+def user_input_is_invalid(user_input, valid_range):
+    input_is_invalid = user_input.isalpha() or not user_input.isdigit() or int(user_input) < valid_range[0] or int(user_input) > valid_range[1]
+    if input_is_invalid:
         return True
-
-#Based on the meme_type selected by the user, determines if a random text meme or a custom meme will be made
-def random_or_custom(meme_type):
-    if user_input_is_valid(meme_type, (1, number_of_images + 1)):
-        if int(meme_type) == number_of_images + 1:
-            custom_meme_image()
-        else:
-            choose_random_text(meme_type)
     else:
-        print("Invalid Input \nChoose between memes 1-5 or choose 6 to create your own\n")
-        ask_meme_type()
+        return False
 
 #Asks the user which stock image to be used for their custom meme
 def custom_meme_image():
     print("\nWhat image will you use for your meme? (refer to image numbers above)")
     image_type = input()      #expects a value from 1-5
-    if user_input_is_valid(image_type, (1, number_of_images)):
-        custom_meme_text(meme_codes[image_type])
-    else:
-        print("Invalid Input \nHey! Do you want a meme? You've got some options here, one through five. Choose wisely!")
-        custom_meme_image()
+    return str(image_type)
 
 #Asks user to input the text to be displayed on their custom meme
-def custom_meme_text(image_type):
+def custom_meme_text():
     print("\nWhat will the text be?")
-    chosen_text = input().upper()
-    compile_meme(image_type, chosen_text)
+    text = input().upper()
+    return text
 
 #Grabs a random string from the appropriate list that will be put on the image
 def choose_random_text(image_type):
-    meme_type = meme_codes[image_type]
-    if variable_exists(meme_type):        
-        text = random.choice(eval(meme_type)).upper()
-        compile_meme(meme_codes[image_type], text)
-    else:
-        print("For this image you will have to create your own text")
-        custom_meme_text(meme_type)
+    meme_type = meme_codes[image_type]       
+    text = random.choice(eval(meme_type)).upper()
+    return text
 
 #Checks if a variable exists
 def variable_exists(variable):
@@ -120,10 +93,11 @@ def variable_exists(variable):
         return True
     else:
         return False
+    
 #Puts the text text on the image and opens the edited image in the computer's default image viewer
 def compile_meme(image_type, text):
     x, y = 0, 0
-    image = Image.open('images/' + image_type + '.png')
+    image = Image.open('images/' + meme_codes[image_type]  + '.png')
     draw = ImageDraw.Draw(image)
     draw.text((x+5,y),text_wrap(text),(0,0,0),font=font,align="center")      #Black outline around white text
     draw.text((x-5,y),text_wrap(text),(0,0,0),font=font,align="center")      #||
@@ -132,7 +106,6 @@ def compile_meme(image_type, text):
     draw.text((x,y),text_wrap(text),(255,255,255),font=font,align="center")  #White text over black outline
     image.show()    
     os.system('cls')
-    welcome() #Restart the program
 
 #Allows for text-wrapping on the meme. When out of space, a new line will be created so that all text is visible on final image
 def text_wrap(text):
@@ -147,11 +120,42 @@ def text_wrap(text):
         elif len(new_text) > limit_len:               
             use_list.append('\n')                       
             limit_len = limit_len + limit_len           
-    return new_text   
+    return new_text
 
+#Resets the code and global variables so program can be run again in one instance
+def reset_code():
+    global number_of_images
+    number_of_images = 0
+    meme_codes.clear()
+    os.system('cls')
 
-#Run Program
-set_up_images()
-bad_images = detect_bad_images()
-resize_image(bad_images)
-welcome()
+#Facilitates program function - Core logic
+def main():
+    set_up_images()
+    bad_images = detect_bad_images()
+    resize_image(bad_images)
+    welcome()
+    meme_type = ask_meme_type()
+    while user_input_is_invalid(meme_type, (1, number_of_images + 1)):
+        print("Invalid Input \nChoose between memes 1-"+str(number_of_images),"or choose",str(number_of_images + 1),"to create your own\n")
+        meme_type = ask_meme_type()
+    if int(meme_type) == number_of_images + 1:
+        image_type = custom_meme_image()
+        while user_input_is_invalid(image_type, (1, number_of_images)):
+            print("Invalid Input \nHey! Do you want a meme? You've got some options here, 1 through", str(number_of_images)+". Choose wisely!")
+            image_type = custom_meme_image()
+        text = custom_meme_text()
+        compile_meme(image_type, text)
+    else:
+        if variable_exists(meme_codes[meme_type]):
+            text = choose_random_text(meme_type)
+            compile_meme(meme_type, text)
+        else:
+            print("For this image you will have to create your own text")
+            text = custom_meme_text()
+            compile_meme(meme_type, text)
+    reset_code()
+    main()
+
+#Run program
+main()
