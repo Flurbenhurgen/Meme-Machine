@@ -62,3 +62,10 @@
 	Added function reset_code()
 	Removed function random_or_custom
 	Fixed bug that would cause the list of meme options to have double entries 
+
+1.3.2
+
+	Simplified main() function
+	Brought back function random_or_custom()
+	Renamed user_input_is_invalid to user_input_is_valid
+	Fixed bugs
